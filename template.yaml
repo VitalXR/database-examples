@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Test
+
+  Sample SAM Template for Test
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  2lambda1srcTwoFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: 2lambda1src/
+      Handler: app.lambda_two_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        2lambda1src:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /test
+            Method: post
+  2lambda1srcFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: 2lambda1src/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        2lambda1src:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /test
+            Method: get
+  lambdaThreeFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: lambda2/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        2lambda1src:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /test2
+            Method: post
+       
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  2lambda1srcApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  2lambda1srcFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt 2lambda1srcFunction.Arn
+  2lambda1srcFunctionIamRole:
+    Description: "Implicit IAM Role created for First function"
+    Value: !GetAtt 2lambda1srcFunctionRole.Arn
+  2lambda1srcTwoFunction:
+    Description: "Two Lambda Function ARN"
+    Value: !GetAtt 2lambda1srcTwoFunction.Arn
+  2lambda1srcTwoFunctionIamRole:
+    Description: "Implicit IAM Role created for Second Two function"
+    Value: !GetAtt 2lambda1srcTwoFunctionRole.Arn
+  lambdaThreeFunction:
+    Description: "Lambda 3 Function ARN"
+    Value: !GetAtt lambdaThreeFunction.Arn
+  lambdaThreeFunctionIamRole:
+    Description: "Implicit IAM Role created for Third Two function"
+    Value: !GetAtt lambdaThreeFunction.Arn
