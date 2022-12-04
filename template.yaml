@@ -53,7 +53,40 @@ Resources:
           Properties:
             Path: /test2
             Method: post
-       
+  DynamoFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: dynamo/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+      # Give your Lambda full access to DynamoDB
+      - AmazonDynamoDBFullAccess
+      Events:
+        ExampleGet:
+          Type: Api
+          Properties:
+            Path: /dynamo
+            Method: get
+  DynamoFunctionTwo:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: dynamo/
+      Handler: app.lambda_two_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+      # Give your Lambda full access to DynamoDB
+      - AmazonDynamoDBFullAccess
+      Events:
+        ExampleGet:
+          Type: Api
+          Properties:
+            Path: /dynamo
+            Method: post
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -80,3 +113,9 @@ Outputs:
   lambdaThreeFunctionIamRole:
     Description: "Implicit IAM Role created for Third Two function"
     Value: !GetAtt lambdaThreeFunction.Arn
+  DynamoFunction:
+    Description: "Test dynamo lambda"
+    Value: !GetAtt DynamoFunction.Arn
+  DynamoFunctionTwo:
+    Description: "Dynamo function two ARN"
+    Value: !GetAtt DynamoFunctionTwo.Arn

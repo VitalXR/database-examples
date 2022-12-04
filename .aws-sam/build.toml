@@ -19,4 +19,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["lambdaThreeFunction"]
 
+[function_build_definitions.96d5ef79-022d-4c3a-8d1e-949b6896f503]
+codeuri = "C:\\Users\\14036\\Desktop\\vitalxr\\baseLambdaSAMExample\\dynamo"
+runtime = "python3.9"
+architecture = "x86_64"
+handler = "app.lambda_two_handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["DynamoFunction", "DynamoFunctionTwo"]
+
 [layer_build_definitions]
